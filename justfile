@@ -3,7 +3,7 @@ set windows-shell := ["nu", "-c"]
 year := "2023"
 
 default:
-  just --list
+  @just --list
 
 
 [no-exit-message]
