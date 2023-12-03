@@ -11,7 +11,7 @@ class Reveal:
     blue: int
 
     @staticmethod
-    def from_list(data: list[str]):
+    def from_iter(data: iter):
         obj_vars = {
             "red": 0,
             "green": 0,
@@ -26,8 +26,18 @@ class Reveal:
         return Reveal(obj_vars.get("red"), obj_vars.get("green"), obj_vars.get("blue"))
 
     @staticmethod
-    def to_tuple(reveal) -> tuple:
-        return (reveal.red, reveal.green, reveal.blue)
+    def to_tuple(reveal: "Reveal") -> tuple:
+        return reveal.red, reveal.green, reveal.blue
+
+    def to_tuple(self) -> tuple:
+        return self.red, self.green, self.blue
+
+    @staticmethod
+    def minify(reveal: "Reveal") -> tuple:
+        return Reveal.to_tuple(reveal)
+
+    def minify(self) -> tuple:
+        return self.to_tuple()
 
 
 @dataclass
@@ -41,21 +51,25 @@ class Game:
             identifier=line.split(":")[0].split(" ")[1],
             reveals=list(
                 map(
-                    Reveal.from_list,
+                    Reveal.from_iter,
                     [reveal.split(", ") for reveal in line.split(": ")[1].split("; ")],
                 )
             ),
         )
+
+    @staticmethod
+    def minify(game: "Game"):
+        return game.identifier, tuple(map(Reveal.minify, game.reveals))
+
+    def minify(self):
+        return int(self.identifier), tuple(map(Reveal.minify, self.reveals))
 
 
 def part_1(input_content: str, restriction: dict) -> int:
     """Command for part 1."""
     input_data = input_content.splitlines()
     games = tuple(map(Game.from_str, input_data))
-    reveals = tuple(
-        (int(game.identifier), tuple(map(Reveal.to_tuple, game.reveals)))
-        for game in games
-    )
+    reveals = tuple(map(Game.minify, games))
     max_balls = tuple(
         (reveal_group[0], tuple(map(max, zip(*reveal_group[1]))))
         for reveal_group in reveals
