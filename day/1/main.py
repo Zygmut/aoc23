@@ -6,7 +6,6 @@ def part_1(input_content: str):
     input_data: list[str] = input_content.splitlines()
 
     numbers = [tuple(filter(str.isdigit, line)) for line in input_data]
-    print(numbers)
     composed_numbers = [f"{number[0]}{number[-1]}" for number in numbers]
     res = sum(map(int, composed_numbers))
     return res
