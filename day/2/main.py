@@ -1,5 +1,7 @@
 from pathlib import Path
 from dataclasses import dataclass
+from functools import reduce
+from operator import mul
 
 
 @dataclass
@@ -58,7 +60,6 @@ def part_1(input_content: str, restriction: dict) -> int:
         (reveal_group[0], tuple(map(max, zip(*reveal_group[1]))))
         for reveal_group in reveals
     )
-
     compliant_games = tuple(
         game[0]
         for game in max_balls
@@ -73,6 +74,14 @@ def part_1(input_content: str, restriction: dict) -> int:
 def part_2(input_content: str):
     """Command for part 2."""
 
+    input_data = input_content.splitlines()
+    games = tuple(map(Game.from_str, input_data))
+    reveals = tuple(tuple(map(Reveal.to_tuple, game.reveals)) for game in games)
+    max_balls = tuple(tuple(map(max, zip(*reveal_group))) for reveal_group in reveals)
+    powers = tuple(reduce(mul, ball_set, 1) for ball_set in max_balls)
+
+    return sum(powers)
+
 
 if __name__ == "__main__":
     data_path = (Path(__file__).resolve()).parent / "data" / "input.txt"
@@ -84,8 +93,8 @@ if __name__ == "__main__":
     input_content = data_path.read_text()
     restriction = {"red": 12, "green": 13, "blue": 14}
 
-    print("Part 1")
-    print(part_1(input_content, restriction))
+    # print("Part 1")
+    # print(part_1(input_content, restriction))
 
-    # print("Part 2")
-    # print(part_2(input_content))
+    print("Part 2")
+    print(part_2(input_content))
