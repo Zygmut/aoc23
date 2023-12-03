@@ -25,10 +25,11 @@ new day:
   @echo "✅ Successfully created day {{day}}. Happy coding!"
 
 
-test day:
+test day *args:
   @echo "🚧 WIP"
 
 
-run day:
+[no-exit-message]
+run day *args:
   @echo "💡 Executing day {{day}} ..."
-  @python ./day/{{day}}/src/main.py ./day/{{day}}/data/input
+  @timeit {python ./day/{{day}}/main.py {{args}}}

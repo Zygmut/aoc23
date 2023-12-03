@@ -13,3 +13,6 @@ insert_final_newline = true
 [*.txt]
 trim_trailing_whitespace = unset
 insert_final_newline = unset
+
+[*.py]
+indent_size = 4
