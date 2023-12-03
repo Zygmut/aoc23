@@ -93,8 +93,8 @@ if __name__ == "__main__":
     input_content = data_path.read_text()
     restriction = {"red": 12, "green": 13, "blue": 14}
 
-    # print("Part 1")
-    # print(part_1(input_content, restriction))
+    print("Part 1")
+    print(part_1(input_content, restriction))
 
     print("Part 2")
     print(part_2(input_content))
